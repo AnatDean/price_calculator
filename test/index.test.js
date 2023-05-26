@@ -14,6 +14,7 @@ describe('calculator', () => {
                 item: 'beans',
                 price: '0.50'
             }],
+            savings:[],
             totals:[{
                 item: 'Total to pay',
                 price: '0.50'
@@ -21,7 +22,7 @@ describe('calculator', () => {
         expect(calculator(basket).receipt).toEqual(receipt);
     })
     describe('offers', () => {
-        test.only('should apply multi-buy savings', () => {
+        test('should apply multi-buy savings', () => {
             const offers = [{ item: 'beans', basePrice: "0.50", offerName: "2 for 1", offerType:'unit',offerMultiplier: 0.5,offerCondition:2 }]
             const basket = [{ item: 'beans', price: '0.50' }]
             const basket2 = [{ item: 'beans', price: '0.50' }, { item: 'beans', price: '0.50' }]
@@ -30,6 +31,32 @@ describe('calculator', () => {
             expect(calculator(basket2, offers).total).toBe('0.50');
             expect(calculator(basket3, offers).total).toBe('1.00');
         })
-       
+        test('should add multi-buy savings to receipt', () => {
+            const offers = [{ item: 'beans', basePrice: "0.50", offerName: "2 for 1", offerType:'unit',offerMultiplier: 0.5,offerCondition:2 }]
+            const basket = [{ item: 'beans', price: '0.50' }, { item: 'beans', price: '0.50' }, { item: 'beans', price: '0.50' }]
+            const receipt =  {
+                items:[{
+                    item: 'beans',
+                    price: '0.50'
+                },
+                {
+                    item: 'beans',
+                    price: '0.50'
+                },
+                {
+                    item: 'beans',
+                    price: '0.50'
+                }],
+                savings: [{
+                    item:'2 for 1',
+                    price: "0.50"
+                }],
+                totals:[{
+                    item: 'Total to pay',
+                    price: '1.00'
+                }]
+            }
+            expect(calculator(basket, offers).receipt).toEqual(receipt);
+        })
     })
 })

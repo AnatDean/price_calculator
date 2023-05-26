@@ -14,8 +14,6 @@ exports.calculator = (basket, offers = []) => {
 
         const currentReceipt = {...receipt, items: [...receipt.items, item]};
 
-        if (isLastItem) currentReceipt.totals.push({item: "Total to pay", price: totalAsPrice})
-
         return {receipt: currentReceipt, total:totalAsPrice};
     }, {receipt:{items:[], savings: [], totals:[]}, total:''})
 
@@ -28,11 +26,17 @@ exports.calculator = (basket, offers = []) => {
         // check eligibility of items for offer
         const eligibleItems = basketTotal.receipt.items.filter(basketItem => basketItem.item === item );
         const conditionMet = eligibleItems.length >= offerCondition;
-        // apply offer
         const discount = calculateDiscount(offer, eligibleItems);
-        if (discount > 0) basketTotal.total = (+basketTotal.total - discount).toFixed(2)
+        // apply offer & ammend receipt
+        if (discount > 0) {
+            basketTotal.total = (+basketTotal.total - discount).toFixed(2)
+            basketTotal.receipt.savings.push({item: offerName, price: discount.toFixed(2)})
+        }
        };
 
-    })
+
+    });
+
+    basketTotal.receipt.totals.push({item:'Total to pay', price:basketTotal.total })
     return basketTotal
 }
