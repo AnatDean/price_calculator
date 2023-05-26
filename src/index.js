@@ -17,6 +17,9 @@ exports.calculator = (basket, offers = []) => {
         return {receipt: currentReceipt, total:totalAsPrice};
     }, {receipt:{items:[], savings: [], totals:[]}, total:''})
 
+    // subTotal 
+    const subTotalItem = {item: 'Sub-total', price: basketTotal.total}
+    basketTotal.receipt.totals.push(subTotalItem)
 
     offers.forEach(offer => {
        const { item, basePrice,offerName,offerValue, offerType,offerUnit, offerCondition, } = offer;
@@ -33,10 +36,10 @@ exports.calculator = (basket, offers = []) => {
             basketTotal.receipt.savings.push({item: offerName, price: discount.toFixed(2)})
         }
        };
-
-
     });
 
+    if (offers.length) basketTotal.receipt.totals.push({item:'Total Savings', price: (+subTotalItem.price - +basketTotal.total).toFixed(2) })
     basketTotal.receipt.totals.push({item:'Total to pay', price:basketTotal.total })
+    console.log(JSON.stringify(basketTotal, null, 2))
     return basketTotal
 }
