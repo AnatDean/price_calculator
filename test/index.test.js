@@ -1,4 +1,4 @@
-const { calculator } = require('../src/index');
+const { calculator } = require('../src/calculator');
 
 describe('calculator', () => {
     test('should add up simple supermaket items without offers or by weight pricing', () => {

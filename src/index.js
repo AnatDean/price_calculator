@@ -1,28 +1,21 @@
-const {calculateSavings} = require('./offers')
+const {calculator} = require('./calculator')
+
+const sampleBasket = [{ item: 'beans', price: '0.50' }, { item: 'beans', price: '0.50' }, { item: 'beans', price: '0.50' }]
+
+const sampleOffers = [{ item: 'beans', basePrice: "0.50", offerName: "2 for 1", offerType:'unit',offerMultiplier: 0.5,offerCondition:2 }]
+
+const calculatedBasket = calculator(sampleBasket, sampleOffers)
 
 
-exports.calculator = (basket, offers = []) => {
-    const basketTotal =  basket.reduce(({receipt, total}, item, i) => {
-        const currentTotal = +total + +item.price;
-        const totalAsPrice = currentTotal.toFixed(2);
+Object.entries(calculatedBasket.receipt).forEach(([label, table]) => {
+    console.log(label)
+    console.log(`----`)
 
-        const currentReceipt = {...receipt, items: [...receipt.items, item]};
+    table.forEach(({price, item}) => {
+        console.log(`${item} | ${price}`)
+        
+    })
+    console.log(`----`)
+});
 
-        return {receipt: currentReceipt, total:totalAsPrice};
-    }, {receipt:{items:[], savings: [], totals:[]}, total:''})
 
-    // subTotal 
-    const subTotalItem = {item: 'Sub-total', price: basketTotal.total}
-    basketTotal.receipt.totals.push(subTotalItem)
-
-    const {savings, totalSavings} = calculateSavings(offers, basketTotal);
-
-    
-    if (totalSavings) basketTotal.receipt.totals.push({item:'Total Savings', price: totalSavings.toFixed(2) })
-    if (totalSavings) basketTotal.total =  (basketTotal.total - totalSavings).toFixed(2)
-    if (savings.length) basketTotal.receipt.savings = savings;
-
-    basketTotal.receipt.totals.push({item:'Total to pay', price:basketTotal.total })
-
-    return basketTotal
-}
