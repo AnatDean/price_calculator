@@ -10,16 +10,26 @@ const calculatePriceByWeight = (basePrice, weight, priceModifier) => {
     return roundTo(price, 2)
 }; 
 
+const createReceiptItem = (isPricedByWeight, item, actualPrice) => {
+    return !isPricedByWeight ? item : {
+        item: item.item,
+        price: actualPrice.toFixed(2),
+        modifier: `${item.weight} @ ${item.price}/${item.priceModifier}`
+    }
+}
 
 exports.calculator = (basket, offers = []) => {
     const basketTotal =  basket.reduce(({receipt, total}, item, i) => {
+
         const isPricedByWeight = !! item.weight && item.priceModifier;
         const price = !isPricedByWeight ? +item.price : calculatePriceByWeight(item.price, item.weight, item.priceModifier) 
         const currentTotal = +total + price;
-        console.log({currentTotal: currentTotal.toFixed(2)})
+      
         const totalAsPrice = currentTotal.toFixed(2);
 
-        const currentReceipt = {...receipt, items: [...receipt.items, item]};
+        const itemToAdd = createReceiptItem(isPricedByWeight, item, price)
+        
+        const currentReceipt = {...receipt, items: [...receipt.items, itemToAdd]};
 
         return {receipt: currentReceipt, total:totalAsPrice};
     }, {receipt:{items:[], savings: [], totals:[]}, total:''})

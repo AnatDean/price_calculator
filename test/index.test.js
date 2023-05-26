@@ -108,5 +108,34 @@ describe('calculator', () => {
         expect(calculator(basket2).total).toBe('1.99');
         expect(calculator(basket3).total).toBe('2.39'); // round 2.388 up.
     })
+    test('should reflect price by weight in receipt', () => {
+        const basket = [
+            { item: 'beans', price: '0.50' },
+            { item: 'bananas', price: '1.99', weight: '0.6kg', priceModifier: 'kg' }]
+        const receipt =  {
+            items:[{
+                item: 'beans',
+                price: '0.50'
+            },
+            {
+                item:'bananas',
+                price: '1.19',
+                modifier: '0.6kg @ 1.99/kg'
+            }
+         ],
+            savings: [],
+            totals:[{
+                item: 'Sub-total',
+                price: '1.69'
+            },
+            
+            {
+                item: 'Total to pay',
+                price: '1.69'
+            },
+        ]
+        }
+        expect(calculator(basket).receipt).toEqual(receipt)
+    })
    
 })
