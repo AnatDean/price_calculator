@@ -14,7 +14,6 @@ describe('calculator', () => {
                 item: 'beans',
                 price: '0.50'
             }],
-            savings:[],
             totals:[{
                 item: 'Total to pay',
                 price: '0.50'
@@ -22,12 +21,15 @@ describe('calculator', () => {
         expect(calculator(basket).receipt).toEqual(receipt);
     })
     describe('offers', () => {
-        test('should apply multi-buy savings', () => {
-            const offers = [{ item: 'beans', basePrice: "0.50", discountName: "2 for 1", discountValue: "50", discountUnit: "%" }]
+        test.only('should apply multi-buy savings', () => {
+            const offers = [{ item: 'beans', basePrice: "0.50", offerName: "2 for 1", offerType:'unit',offerMultiplier: 0.5,offerCondition:2 }]
             const basket = [{ item: 'beans', price: '0.50' }]
             const basket2 = [{ item: 'beans', price: '0.50' }, { item: 'beans', price: '0.50' }]
+            const basket3 = [{ item: 'beans', price: '0.50' }, { item: 'beans', price: '0.50' }, { item: 'beans', price: '0.50' }]
             expect(calculator(basket, offers).total).toBe('0.50');
             expect(calculator(basket2, offers).total).toBe('0.50');
+            expect(calculator(basket3, offers).total).toBe('1.00');
         })
+       
     })
 })
