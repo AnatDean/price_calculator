@@ -1,10 +1,10 @@
 const calculateDiscount = (offer, items) => {
-    const { basePrice,offerMultiplier, offerCondition} = offer;
+    const { basePrice,offerMultiplier, offerCondition, offerType} = offer;
 
     // presuming offer conditions are based on minimum units of product.
     const numberOfNonEligibleItems = items.length % offerCondition;
     const eligibleItemsN = items.length - numberOfNonEligibleItems;
-    
+
     const discount = eligibleItemsN  * offerMultiplier * basePrice
     return discount
 }

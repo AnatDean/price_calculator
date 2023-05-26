@@ -100,4 +100,13 @@ describe('calculator', () => {
             expect(calculator(basket, offers).receipt).toEqual(receipt);
         })
     })
+    test('should calculate price by weight', () => {
+        const basket = [{ item: 'beans', price: '1.99', weight: '0.5kg', priceModifier: 'kg' }]
+        const basket2 = [{ item: 'beans', price: '1.99', weight: '1kg', priceModifier: 'kg'}]
+        const basket3 = [{ item: 'beans', price: '1.99', weight: '1.2kg' , priceModifier: 'kg'}]
+        expect(calculator(basket).total).toBe('1.00'); // round 0.995 up.
+        expect(calculator(basket2).total).toBe('1.99');
+        expect(calculator(basket3).total).toBe('2.39'); // round 2.388 up.
+    })
+   
 })

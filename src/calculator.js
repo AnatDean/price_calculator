@@ -1,9 +1,22 @@
 const {calculateSavings} = require('./offers')
 
+const roundTo = (n) => {
+    return Math.round((n * 100).toPrecision(15)) / 100;
+}
+
+const calculatePriceByWeight = (basePrice, weight, priceModifier) => {
+    const [weightValue] = weight.split(priceModifier);
+    const price = +basePrice * +weightValue;
+    return roundTo(price, 2)
+}; 
+
 
 exports.calculator = (basket, offers = []) => {
     const basketTotal =  basket.reduce(({receipt, total}, item, i) => {
-        const currentTotal = +total + +item.price;
+        const isPricedByWeight = !! item.weight && item.priceModifier;
+        const price = !isPricedByWeight ? +item.price : calculatePriceByWeight(item.price, item.weight, item.priceModifier) 
+        const currentTotal = +total + price;
+        console.log({currentTotal: currentTotal.toFixed(2)})
         const totalAsPrice = currentTotal.toFixed(2);
 
         const currentReceipt = {...receipt, items: [...receipt.items, item]};
