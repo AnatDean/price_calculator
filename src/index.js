@@ -1,6 +1,7 @@
 exports.calculator = (basket) => {
-    return basket.reduce((total, item) => {
+    return basket.reduce(({receipt, total}, item) => {
         const currentTotal = +total + +item.price;
-        return currentTotal.toFixed(2)
-    }, '')
+        const currentReceipt = [...receipt, item]
+        return {receipt: currentReceipt, total:currentTotal.toFixed(2)}
+    }, {receipt:[], total:''})
 }
