@@ -120,7 +120,7 @@ describe('calculator', () => {
             expect(calculator(basket2, offers).total).toBe('6.00');
             expect(calculator(basket3, offers).total).toBe('6.00');
             expect(calculator(basket4, offers).total).toBe('8.00');
-            // expect(calculator(basket5, offers).total).toBe('8.50');
+            expect(calculator(basket5, offers).total).toBe('8.50');
         })
     })
     test('should calculate price by weight', () => {

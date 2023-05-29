@@ -1,28 +1,44 @@
 const differenceBy = require('lodash.differenceby');
 
+
+const handleFixedPriceOffers = ({offer, items, isSetOffer}) => {
+
+    /*
+
+        Get items from basket that are eligible for fixed price offer
+        Discard any that can't be grouped into offer conditions (e.g. only buying in 3s)
+        Total original price
+        Calculate discount from diff between offer price.
+
+    */
+   
+    const eligibleItems = ! isSetOffer ? 
+    items.filter(({item: basketItem})=> offer.item === basketItem) : 
+    items.filter(({item: basketItem}) => offer.set.find(({item: offerItem})=> basketItem === offerItem));
+    
+    const eligibleItemsThatCanBeDiscounted = eligibleItems.slice(0, eligibleItemsN)
+    const totalNonDiscounted = eligibleItemsThatCanBeDiscounted.reduce((total, item) => total + +item.price, 0)
+    
+    const discountValue =  totalNonDiscounted - +offer.offerPrice
+    return discountValue
+}
+
 const calculateDiscount = (offer, items) => {
     const { basePrice,offerMultiplier, offerCondition, offerType} = offer;
+
+
     const isFixedPriceOffer = offerType === 'fixed'
     const isSetOffer = !!offer.set
     const itemsNotInSet = isSetOffer && differenceBy(items, offer.set, 'item');
 
     const numberOfNonEligibleItems = (items.length % offerCondition) + (isSetOffer && itemsNotInSet.length); 
-    const eligibleItemsN = items.length - numberOfNonEligibleItems ; 
 
+    const eligibleItemsN = items.length - numberOfNonEligibleItems ; 
     if (!eligibleItemsN) return 0
 
     if (isFixedPriceOffer) {
-        const eligibleItems = ! isSetOffer ? items.filter(({item: basketItem})=> 
-            offer.item === basketItem
-        ) : items.filter(({item: basketItem}) => offer.set.find(({item: offerItem})=> basketItem === offerItem));
-
-        const totalNonDiscounted = eligibleItems.reduce((total, item) => total + +item.price, 0)
-        const discountValue =  totalNonDiscounted - +offer.offerPrice
-        return discountValue
-        
+       handleFixedPriceOffers({offer, items, isSetOffer})
     }
-
-
 
     const discount =  offerMultiplier * basePrice;
     return isFixedPriceOffer ? discount : discount * eligibleItemsN
