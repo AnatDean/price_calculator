@@ -1,7 +1,7 @@
 const differenceBy = require('lodash.differenceby');
 
 
-const handleFixedPriceOffers = ({offer, items, isSetOffer}) => {
+const handleFixedPriceOffers = ({offer, items, isSetOffer, eligibleItemsN}) => {
 
     /*
 
@@ -18,8 +18,10 @@ const handleFixedPriceOffers = ({offer, items, isSetOffer}) => {
     
     const eligibleItemsThatCanBeDiscounted = eligibleItems.slice(0, eligibleItemsN)
     const totalNonDiscounted = eligibleItemsThatCanBeDiscounted.reduce((total, item) => total + +item.price, 0)
+    console.log({eligibleItems, eligibleItemsThatCanBeDiscounted, totalNonDiscounted})
     
     const discountValue =  totalNonDiscounted - +offer.offerPrice
+
     return discountValue
 }
 
@@ -37,7 +39,7 @@ const calculateDiscount = (offer, items) => {
     if (!eligibleItemsN) return 0
 
     if (isFixedPriceOffer) {
-       handleFixedPriceOffers({offer, items, isSetOffer})
+      return handleFixedPriceOffers({offer, items, isSetOffer, eligibleItemsN})
     }
 
     const discount =  offerMultiplier * basePrice;
