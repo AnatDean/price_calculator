@@ -5,7 +5,7 @@ const calculateDiscount = (offer, items) => {
     // presuming offer conditions are based on minimum units of product, and multiple applications of offer.
     const numberOfNonEligibleItems = items.length % offerCondition; 
     const eligibleItemsN = items.length - numberOfNonEligibleItems; 
-
+    if (!eligibleItemsN) return 0
 
     const discount =  offerMultiplier * basePrice;
     return isFixedPriceOffer ? discount : discount * eligibleItemsN
