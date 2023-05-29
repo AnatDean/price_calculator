@@ -11,7 +11,6 @@ const sampleOffers = [
     { ...IPA, offerName: "3 ales for £6", offerType:'fixed', offerPrice: '6.00', offerCondition:3 , set:[IPA, caskAle]}]
 
 const calculatedBasket = calculator(sampleBasket, sampleOffers)
-console.log({calculatedBasket: JSON.stringify(calculatedBasket, null, 2)})
 
 Object.entries(calculatedBasket.receipt).forEach(([label, table]) => {
     console.log(label)
