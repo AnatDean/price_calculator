@@ -100,11 +100,27 @@ describe('calculator', () => {
             expect(calculator(basket, offers).receipt).toEqual(receipt);
         })
         test('should apply x for y price savings', () => {
-            const offers = [{ item: 'coke', basePrice: "1.50", offerName: "2 for £2", offerType:'fixed',offerMultiplier: (2/3),offerCondition:2 }]
+            const offers = [{ item: 'coke', basePrice: "1.50", offerName: "2 for £2", offerPrice: '2.00', offerType:'fixed',offerMultiplier: (2/3),offerCondition:2 }]
             const basket = [{ item: 'coke', price: '1.50' }]
             const basket2 = [{ item: 'coke', price: '1.50' }, { item: 'coke', price: '1.50' }]
             expect(calculator(basket, offers).total).toBe('1.50');
             expect(calculator(basket2, offers).total).toBe('2.00');
+        })
+        test('should apply x for y within set price offer', () => {
+            const IPA = {item: 'IPA', price: '2.50'}
+            const goldenAle = {item:'golden ale', price:'3.00' }
+            const caskAle = {item:'cask ale', price:'3.00' }
+            const offers = [{ ...IPA, offerName: "3 for £6", offerType:'fixed',offerMultiplier: (2/3), offerPrice: '6.00', offerCondition:3 , set:[IPA, caskAle]}]
+            const basket = [IPA]
+            const basket2 = [IPA,IPA,IPA]
+            const basket3 = [IPA,IPA,caskAle]
+            const basket4 = [IPA,IPA,goldenAle]
+            const basket5 = [IPA,IPA,IPA, IPA]
+            expect(calculator(basket, offers).total).toBe('2.50');
+            expect(calculator(basket2, offers).total).toBe('6.00');
+            expect(calculator(basket3, offers).total).toBe('6.00');
+            expect(calculator(basket4, offers).total).toBe('8.00');
+            // expect(calculator(basket5, offers).total).toBe('8.50');
         })
     })
     test('should calculate price by weight', () => {

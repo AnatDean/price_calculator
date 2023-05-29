@@ -1,17 +1,32 @@
+const differenceBy = require('lodash.differenceby');
+
 const calculateDiscount = (offer, items) => {
     const { basePrice,offerMultiplier, offerCondition, offerType} = offer;
     const isFixedPriceOffer = offerType === 'fixed'
+    const isSetOffer = !!offer.set
+    const itemsNotInSet = isSetOffer && differenceBy(items, offer.set, 'item');
 
-    // presuming offer conditions are based on minimum units of product, and multiple applications of offer.
-    const numberOfNonEligibleItems = items.length % offerCondition; 
-    const eligibleItemsN = items.length - numberOfNonEligibleItems; 
+    const numberOfNonEligibleItems = (items.length % offerCondition) + (isSetOffer && itemsNotInSet.length); 
+    const eligibleItemsN = items.length - numberOfNonEligibleItems ; 
+
     if (!eligibleItemsN) return 0
+
+    if (isFixedPriceOffer) {
+        const eligibleItems = ! isSetOffer ? items.filter(({item: basketItem})=> 
+            offer.item === basketItem
+        ) : items.filter(({item: basketItem}) => offer.set.find(({item: offerItem})=> basketItem === offerItem));
+
+        const totalNonDiscounted = eligibleItems.reduce((total, item) => total + +item.price, 0)
+        const discountValue =  totalNonDiscounted - +offer.offerPrice
+        return discountValue
+        
+    }
+
+
 
     const discount =  offerMultiplier * basePrice;
     return isFixedPriceOffer ? discount : discount * eligibleItemsN
 }
-
-const getOfferElligibleItems = (items, offerItem) => items.filter(({item}) => item === offerItem );
 
 exports.calculateSavings = (offers, basketTotal) => {
     return offers.reduce((offerAcc, offer) => {
@@ -21,10 +36,7 @@ exports.calculateSavings = (offers, basketTotal) => {
     if (!basketHasOfferItem) return offerAcc;
     if (basketHasOfferItem) {
 
-     // check eligibility of items for offer
-     const eligibleItems = getOfferElligibleItems(basketTotal.receipt.items, item);
-
-     const discount = calculateDiscount(offer, eligibleItems);
+     const discount = calculateDiscount(offer, basketTotal.receipt.items);
 
      if (discount > 0) {
          const savingItem = {item: offerName, price: discount.toFixed(2)}
