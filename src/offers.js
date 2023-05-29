@@ -1,12 +1,14 @@
 const calculateDiscount = (offer, items) => {
     const { basePrice,offerMultiplier, offerCondition, offerType} = offer;
+    const isFixedPriceOffer = offerType === 'fixed'
 
-    // presuming offer conditions are based on minimum units of product.
-    const numberOfNonEligibleItems = items.length % offerCondition;
-    const eligibleItemsN = items.length - numberOfNonEligibleItems;
+    // presuming offer conditions are based on minimum units of product, and multiple applications of offer.
+    const numberOfNonEligibleItems = items.length % offerCondition; 
+    const eligibleItemsN = items.length - numberOfNonEligibleItems; 
 
-    const discount = eligibleItemsN  * offerMultiplier * basePrice
-    return discount
+
+    const discount =  offerMultiplier * basePrice;
+    return isFixedPriceOffer ? discount : discount * eligibleItemsN
 }
 
 const getOfferElligibleItems = (items, offerItem) => items.filter(({item}) => item === offerItem );

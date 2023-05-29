@@ -99,6 +99,13 @@ describe('calculator', () => {
             }
             expect(calculator(basket, offers).receipt).toEqual(receipt);
         })
+        test('should apply x for y price savings', () => {
+            const offers = [{ item: 'coke', basePrice: "1.50", offerName: "2 for £2", offerType:'fixed',offerMultiplier: (2/3),offerCondition:2 }]
+            const basket = [{ item: 'coke', price: '1.50' }]
+            const basket2 = [{ item: 'coke', price: '1.50' }, { item: 'coke', price: '1.50' }]
+            // expect(calculator(basket, offers).total).toBe('1.50');
+            expect(calculator(basket2, offers).total).toBe('2.00');
+        })
     })
     test('should calculate price by weight', () => {
         const basket = [{ item: 'beans', price: '1.99', weight: '0.5kg', priceModifier: 'kg' }]
