@@ -125,7 +125,6 @@
     "lines-and-columns": "^1.2.4",
     "locate-path": "^5.0.0",
     "lodash.differenceby": "^4.8.0",
-    "lodash.intersectionby": "^4.7.0",
     "lru-cache": "^5.1.1",
     "make-dir": "^3.1.0",
     "makeerror": "^1.0.12",
@@ -200,7 +199,8 @@
     "yocto-queue": "^0.1.0"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "start": "node src/index.js"
   },
   "repository": {
     "type": "git",

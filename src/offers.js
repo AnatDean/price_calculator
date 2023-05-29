@@ -18,7 +18,6 @@ const handleFixedPriceOffers = ({offer, items, isSetOffer, eligibleItemsN}) => {
     
     const eligibleItemsThatCanBeDiscounted = eligibleItems.slice(0, eligibleItemsN)
     const totalNonDiscounted = eligibleItemsThatCanBeDiscounted.reduce((total, item) => total + +item.price, 0)
-    console.log({eligibleItems, eligibleItemsThatCanBeDiscounted, totalNonDiscounted})
     
     const discountValue =  totalNonDiscounted - +offer.offerPrice
 

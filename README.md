@@ -1,47 +1,34 @@
 # price_calculator
-Kata solution for supermarket pricing
+
+# Price Calculator
+
+## Pre-requisites
+- Node
+- Npm
+
+## How to get started
+
+- Download this repository (`git clone <url>`)
+- Install dependencies (`npm install`)
+- Run tests (`npm t`)
+- See an example calculation and receipt (`npm start`)
 
 
-Coding task:
+## Process
 
-The task is to model a supermarket pricing calculator in software. This is inspired by PragDave’s Supermarket Kata.
+- TDD was used throughout to get the basic functionality of the calculations working, with a focus on one pricing structure and one offer structure initially. Then complexity was build in by testing and implementing more pricing structures (by weight, fixed prices and items within a set offers)
 
-You should write a program which works out how to price a shopping basket, allowing for different pricing structures including:
+- I used differenceBy from the lodash utility library while calculating discount amounts for both time constraints and convenience sake.
 
-•     Three tins of beans for the price of two
 
-•     Onions for 29p / kg
+## Approach
 
-•     Two cans of coca-cola for £1
+To consider the possibility of changing requirements I separate the concerns of calculating prices, applying discounts and visuals for the reciept. 
 
-•     Any 3 ales from the set {…} for £6
+Products (items) are given a simple schema that includes a name and price, while price offers are given a more complex schema to handle the various types of offers and to account for the name applied on the reciept. 
 
-Here’s an example of a receipt illustrating the type of output that should be possible (although your program doesn’t need to produce nicely formatted output like this):
+Tradeoffs: at the moment, with limited time to focus on the task, there is inefficiency introduced through repeated iterations. Though the lists are short in the test suite this inefficiency will accumulate as the list of offers or size of basket sizes increase. These iterations are a tradeoff for the minimal project, without stores or databases to cache and retrieve data: instead manually creating and passing around lists of products and offers.
 
- 
-| | |
-|-|-|
-| Beans | 0.50 |
-| Beans | 0.50 |
-| Beans | 0.50 |
-| Coke | 0.70 |
-| Coke | 0.70 |
-| Oranges |  |
-| 0.200 kg @ £1.99/kg | 0.40 |
-| Sub-total | 3.30 |
-| Savings | |
-| Beans 3 for 2 | -0.50 |
-| Coke 2 for £1 | -0.40 |
-| Total savings | -0.90 |
-| Total to pay | 2.40 |
- 
+Language limitations: node is not well known for its number savvyness - with more planning in place I could have better managed the necessary conversion to and from numbers / strings to support the currency two point decimals required throughout.
 
-We’d like you to do your work under version control (preferably using git) and provide us with a copy of the repository when you have finished (by showing us a GitHub / similar repository, or sending us a zip of the repository if you prefer).
-
-Your work does not need to account for user interface or IO; we are interested in how you represent a basket of things and a set of pricing rules, how you compute the correct price for the basket, and what you have done to assess the correctness of what you have made.
-
-You should be designing with some thought to how the requirements might change and assessing the ways they are incomplete.
-
-We would also like the repository to contain a README explaining what you have done, how to use your work, and any trade-offs, limitations or particularly excellent features of what you have made.
-
-We would prefer if you use some of the technologies we are most familiar with, so ideally this would be written in one of Python, Clojure, Java or Javascript. We understand that we’re asking you to do work in your free time and that this might be hard to accommodate, so please do not feel you have to spend ages on it.
+Achievements: I am proud of the particular challenge and solution I took to the application of offers/discounts when considering a numerical condition (e.g minimum 3 products) and accounting for that condition being met multiple times or only partially (e.g. 7 coffees for a deal that applies to 3 coffees at a time must discount 6). 
