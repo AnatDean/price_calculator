@@ -1,12 +1,10 @@
-# price_calculator
-
 # Price Calculator
 
-## Pre-requisites
+## Pre-requisites
 - Node
 - Npm
 
-## How to get started
+## How to get started
 
 - Download this repository (`git clone <url>`)
 - Install dependencies (`npm install`)
